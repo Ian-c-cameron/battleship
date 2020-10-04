@@ -8,23 +8,22 @@ class Gameboard {
     this.maxNum = maxNum;
     this.maxLetter = maxLetter;
     //0=empty and untried, 1=empty and tried, 2=hit but not sunk, 3=sunk
-    for (let x = 1; x <= maxNum; x++){
-      for (let char = a; char <= maxLetter; char = String.fromCharCode(char.charCodeAt(0) + 1)) {
+    for (let x = 1; x <= maxNum; x++) {
+      for (let char = 'a'; char <= maxLetter; char = String.fromCharCode(char.charCodeAt(0) + 1)) {
         this[char + x] = 0;
       }
     }
   }
 
   /**
-   * markShip - marks that a position on the game board is occupied 
+   * markShip - marks that a position on the game board is occupied
    * @param {*} position A position occupied by the ship
    * @param {*} ship The ship object that occupies the space
    * @param {*} direction true=horizontal, false vertical
    */
   markShip(position, ship, direction) {
-    let index = position[0] + position[1];
-    if (direction){
-      if (position[1] + (ship.length -1) > this.maxNum){
+    if (direction) {
+      if (position[1] + (ship.length - 1) > this.maxNum) {
         return false;
       }
       for (let x = position[1]; x < position[1] + ship.length; x++) {
@@ -33,7 +32,7 @@ class Gameboard {
       }
       return true;
     }
-    const lastLetter = String.fromCharCode(position[0].charCodeAt(0) + (ship.length-1));
+    const lastLetter = String.fromCharCode(position[0].charCodeAt(0) + (ship.length - 1));
     if (lastLetter > this.maxLetter) {
       return false;
     }
@@ -50,7 +49,7 @@ class Gameboard {
    */
   attack(position) {
     let index = position[0] + position[1];
-    if (!this[index]){
+    if (!this[index]) {
       this[index] = 1;
       return 'You Missed!';
     }
@@ -63,40 +62,13 @@ class Gameboard {
     if (sunk) {
       for (const hit of sunk) {
         this[hit] = 3;
-        return 'Ship Sunk!'
+        return 'Ship Sunk!';
       }
     }
-    this[index] = 2
+    this[index] = 2;
     return 'Hit!';
   }
 }
 
 
 
-validateCoord([letter, num]) {
-  //invalidate non strings and too long or short
-  if (typeof letter !== 'string' || typeof num !== 'number') {
-    return false;
-  }
-  if (letter.length !== 1) {
-    console.log('invalid letter: more than one char');
-    return false;
-  }
-  if (!Number.isInteger(num)) {
-    console.log('invalid number: not an Int');
-    return false;
-  }
-
-  //invalidate letters outside the valid range
-  if (letter < 'a' || letter > this.maxLetter) {
-    console.log('invalid letter: out of range');
-    return false;
-  }
-
-  //invalidate numbers outside the valid range
-  if (num < 1 || num > this.maxNum) {
-    console.log('invalid number: out of range');
-    return false;
-  }
-  return true;
-}
